@@ -17,3 +17,16 @@ export const fetchMatchesByMatchday = async (matchday) => {
   const data = await response.json();
   return data;
 };
+
+export const fetchMatchesByMatchdayAndUser = async (matchday, user) => {
+  const response = await fetch(
+    `${API_BASE_URL}/matchday/${matchday}/user/${user}`
+  );
+
+  if (!response.ok) {
+    throw new Error("Error al obtener los partidos por usuario");
+  }
+
+  const data = await response.json();
+  return data;
+};
