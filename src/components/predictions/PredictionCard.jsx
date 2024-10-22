@@ -1,49 +1,29 @@
-// export function PredictionCard({ match, predictions }) {
-//   return (
-//     <div className="prediction-card">
-//       <div className="match-info">
-//         <div className="team">
-//           <img src={match.localTeam.logoUrl} alt={match.localTeam.name} />
-//           <span>{match.localTeam.name}</span>
-//         </div>
-//         <div className="score">
-//           {match.localGoals} - {match.awayGoals}
-//         </div>
-//         <div className="team">
-//           <img src={match.awayTeam.logoUrl} alt={match.awayTeam.name} />
-//           <span>{match.awayTeam.name}</span>
-//         </div>
-//       </div>
-//       <div className="predictions">
-//         {predictions.length > 0 ? (
-//           predictions.map((prediction) => (
-//             <div key={prediction.id} className="user-prediction">
-//               <img
-//                 src={prediction.user.imageUrl}
-//                 alt={prediction.user.name}
-//                 className="user-avatar"
-//               />
-//               <span>{prediction.user.name}</span>
-//               <span>
-//                 Predicción: {prediction.goalsLocalPrediction} -{" "}
-//                 {prediction.goalsAwayPrediction}
-//               </span>
-//             </div>
-//           ))
-//         ) : (
-//           <div>No hay predicciones</div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-
+import { useState } from "react";
 import { Team } from "../matches/Team";
 import { MatchScoreboard } from "../matches/MatchScoreboard";
 import { MatchPrediction } from "../matches/MatchPrediction";
+import { TransparentButton } from "../TrasnparentButton";
+import { ModalEditPrediction } from "./ModalEditPrediction"; // Importa el componente de la modal
+import { editPrediction } from "../../services/predictionService"; // Importa el servicio si lo necesitas aquí
 
 export function PredictionCard({ match }) {
-  console.log(match);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPrediction, setCurrentPrediction] = useState(null); // Estado para guardar la predicción actual
+
+  const handleSave = (updatedPrediction) => {
+    // Encuentra el índice de la predicción editada y actualízala
+    const updatedPredictions = match.predictions.map((pred) =>
+      pred.id === updatedPrediction.id ? updatedPrediction : pred
+    );
+
+    // Actualiza el estado del match con las nuevas predicciones
+    // Asumiendo que tienes un state en PredictionCard para manejar match
+    setMatch((prevMatch) => ({
+      ...prevMatch,
+      predictions: updatedPredictions,
+    }));
+  };
+
   return (
     <div className="p-4 rounded-lg shadow-lg mx-auto bg-gray-800 text-white w-96">
       <div className="flex justify-between items-center mb-4">
@@ -57,8 +37,27 @@ export function PredictionCard({ match }) {
 
       {/* Predicciones de usuarios */}
       {match.predictions.map((prediction, index) => (
-        <MatchPrediction key={index} prediction={prediction} />
+        <div className="flex items-center justify-between" key={index}>
+          <MatchPrediction prediction={prediction} />
+          <TransparentButton
+            type="button"
+            onClick={() => {
+              setCurrentPrediction(prediction); // Establece la predicción actual
+              setIsModalOpen(true); // Abre el modal
+            }}
+            value="Editar"
+          />
+        </div>
       ))}
+      {currentPrediction && (
+        <ModalEditPrediction
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          match={match}
+          prediction={match.predictions[0]}
+          onSave={handleSave} // Pasa la función para guardar cambios
+        />
+      )}
     </div>
   );
 }

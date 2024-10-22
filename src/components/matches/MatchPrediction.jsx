@@ -1,6 +1,6 @@
 export function MatchPrediction({ prediction }) {
   return (
-    <div className="flex items-center mt-4">
+    <div className="flex items-center">
       <img
         src={prediction.user.imageUrl} // Usa un placeholder si no hay imagen
         alt={prediction.user.name}

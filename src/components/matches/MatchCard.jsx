@@ -15,9 +15,11 @@ export function MatchCard({ match }) {
       </div>
 
       {/* Predicciones de usuarios */}
-      {match.predictions.map((prediction, index) => (
-        <MatchPrediction key={index} prediction={prediction} />
-      ))}
+      <div className="flex flex-col gap-2">
+        {match.predictions.map((prediction, index) => (
+          <MatchPrediction key={index} prediction={prediction} />
+        ))}
+      </div>
     </div>
   );
 }
