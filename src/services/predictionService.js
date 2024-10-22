@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:1906/api/predictions";
+const API_BASE_URL = `${import.meta.env.VITE_API_URL}/predictions`;
 
 export const editPrediction = async (prediction) => {
   const response = await fetch(`${API_BASE_URL}/edit`, {

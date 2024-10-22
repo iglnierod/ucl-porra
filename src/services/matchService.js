@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:1906/api/matches";
+const API_BASE_URL = `${import.meta.env.VITE_API_URL}/matches`;
 
 export const fetchMatchdays = async () => {
   const response = await fetch(`${API_BASE_URL}/matchday`);
