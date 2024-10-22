@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StandingUser } from "./StandingUser";
+import { fetchUsers } from "../../services/userService";
 
 export function Standings() {
   // const standings = [
@@ -34,19 +35,18 @@ export function Standings() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const apiUrl = "http://localhost:1906/api/users";
-
-    fetch(apiUrl)
-      .then((response) => response.json())
-      .then((data) => {
-        const sortedData = data.sort((a, b) => b.points - a.points);
-        setStandings(sortedData);
+    const loadStandings = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchUsers();
+        setStandings(data);
         setLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         setError(error);
         setLoading(false);
-      });
+      }
+    };
+    loadStandings();
   }, []);
 
   if (loading) return <p>Cargando...</p>;
