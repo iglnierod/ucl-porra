@@ -4,9 +4,8 @@ import { MatchScoreboard } from "../matches/MatchScoreboard";
 import { MatchPrediction } from "../matches/MatchPrediction";
 import { TransparentButton } from "../TrasnparentButton";
 import { ModalEditPrediction } from "./ModalEditPrediction"; // Importa el componente de la modal
-import { editPrediction } from "../../services/predictionService"; // Importa el servicio si lo necesitas aquí
 
-export function PredictionCard({ match }) {
+export function PredictionCard({ match, updateMatches }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPrediction, setCurrentPrediction] = useState(null); // Estado para guardar la predicción actual
 
@@ -16,12 +15,19 @@ export function PredictionCard({ match }) {
       pred.id === updatedPrediction.id ? updatedPrediction : pred
     );
 
-    // Actualiza el estado del match con las nuevas predicciones
-    // Asumiendo que tienes un state en PredictionCard para manejar match
-    setMatch((prevMatch) => ({
-      ...prevMatch,
-      predictions: updatedPredictions,
-    }));
+    // Aquí deberías llamar a una función de actualización o manejar el estado de alguna manera.
+    // Sin embargo, como el estado `match` no se puede actualizar directamente aquí,
+    // asegúrate de que el padre maneje el estado si es necesario.
+    // Si `match` es pasado como props, considera tener un callback para informar al padre sobre la actualización.
+
+    // Actualizar el estado del match con las nuevas predicciones
+    updateMatches((prevMatches) =>
+      prevMatches.map((m) =>
+        m.match.id === match.match.id
+          ? { ...m, predictions: updatedPredictions }
+          : m
+      )
+    );
   };
 
   return (
@@ -54,7 +60,7 @@ export function PredictionCard({ match }) {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           match={match}
-          prediction={match.predictions[0]}
+          prediction={currentPrediction} // Usa la predicción actual
           onSave={handleSave} // Pasa la función para guardar cambios
         />
       )}

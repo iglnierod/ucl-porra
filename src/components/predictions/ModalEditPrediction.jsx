@@ -11,7 +11,6 @@ export function ModalEditPrediction({
   prediction,
   onSave,
 }) {
-  console.log(match);
   const [localGoals, setLocalGoals] = useState(prediction.goalsLocalPrediction);
   const [awayGoals, setAwayGoals] = useState(prediction.goalsAwayPrediction);
 
@@ -48,7 +47,7 @@ export function ModalEditPrediction({
       ></div>
       <div className="bg-gray-800 p-6 rounded-lg z-10 w-11/12 max-w-md">
         <h2 className="text-xl mb-4">Editar Predicción</h2>
-        <form onSubmit={handleSubmit} className="">
+        <form onSubmit={handleSubmit}>
           <div className="flex flex-col gap-4">
             <section className="flex w-full justify-evenly items-center">
               <Team team={match.match.localTeam} isLocal />

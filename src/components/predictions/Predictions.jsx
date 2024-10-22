@@ -119,7 +119,11 @@ export function Predictions() {
 
       <section className="flex flex-wrap gap-4 mt-10">
         {matches.map((match) => (
-          <PredictionCard key={match.match.id} match={match} />
+          <PredictionCard
+            key={match.match.id}
+            match={match}
+            updateMatches={setMatches}
+          />
         ))}
       </section>
     </section>
