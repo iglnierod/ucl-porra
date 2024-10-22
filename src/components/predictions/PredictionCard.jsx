@@ -3,24 +3,28 @@ import { Team } from "../matches/Team";
 import { MatchScoreboard } from "../matches/MatchScoreboard";
 import { MatchPrediction } from "../matches/MatchPrediction";
 import { TransparentButton } from "../TrasnparentButton";
-import { ModalEditPrediction } from "./ModalEditPrediction"; // Importa el componente de la modal
+import { ModalEditPrediction } from "./ModalEditPrediction";
+import { ModalAddPrediction } from "./ModalAddPrediction";
+import { Toast } from "../Toast";
 
-export function PredictionCard({ match, updateMatches }) {
+export function PredictionCard({ match, updateMatches, user }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentPrediction, setCurrentPrediction] = useState(null); // Estado para guardar la predicción actual
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [currentPrediction, setCurrentPrediction] = useState(null);
+  const [toast, setToast] = useState({
+    type: "",
+    message: "",
+    visible: false,
+    onClose: () => {
+      closeToast();
+    },
+  });
 
   const handleSave = (updatedPrediction) => {
-    // Encuentra el índice de la predicción editada y actualízala
     const updatedPredictions = match.predictions.map((pred) =>
       pred.id === updatedPrediction.id ? updatedPrediction : pred
     );
 
-    // Aquí deberías llamar a una función de actualización o manejar el estado de alguna manera.
-    // Sin embargo, como el estado `match` no se puede actualizar directamente aquí,
-    // asegúrate de que el padre maneje el estado si es necesario.
-    // Si `match` es pasado como props, considera tener un callback para informar al padre sobre la actualización.
-
-    // Actualizar el estado del match con las nuevas predicciones
     updateMatches((prevMatches) =>
       prevMatches.map((m) =>
         m.match.id === match.match.id
@@ -28,6 +32,41 @@ export function PredictionCard({ match, updateMatches }) {
           : m
       )
     );
+
+    console.log(updatedPrediction);
+
+    setToast({
+      type: "success",
+      message: `Predicción editada correctamente: ${updatedPrediction.match.localTeam.name} VS ${updatedPrediction.match.awayTeam.name}`,
+      visible: true,
+    });
+  };
+
+  const handleAddSave = (newPrediction) => {
+    updateMatches((prevMatches) =>
+      prevMatches.map((m) =>
+        m.match.id === match.match.id
+          ? {
+              ...m,
+              predictions: [...m.predictions, newPrediction],
+            }
+          : m
+      )
+    );
+    setToast({
+      type: "success",
+      message: "Predicción añadida correctamente.",
+      visible: true,
+    });
+  };
+
+  // Verifica si hay predicciones para el usuario
+  const userPrediction = match.predictions.find(
+    (prediction) => prediction.user.id === user.id
+  );
+
+  const closeToast = () => {
+    setToast({ ...toast, visible: false });
   };
 
   return (
@@ -40,30 +79,53 @@ export function PredictionCard({ match, updateMatches }) {
         />
         <Team team={match.match.awayTeam} />
       </div>
-
-      {/* Predicciones de usuarios */}
-      {match.predictions.map((prediction, index) => (
-        <div className="flex items-center justify-between" key={index}>
-          <MatchPrediction prediction={prediction} />
+      {/* Mostrar predicciones de los usuarios */}
+      {match.predictions.length > 0
+        ? match.predictions.map((prediction, index) => (
+            <div className="flex items-center justify-between" key={index}>
+              <MatchPrediction prediction={prediction} />
+              <TransparentButton
+                type="button"
+                onClick={() => {
+                  setCurrentPrediction(prediction);
+                  setIsModalOpen(true);
+                }}
+                value="Editar"
+              />
+            </div>
+          ))
+        : null}
+      {/* Mostrar botón "Añadir" si no hay predicciones */}
+      {!userPrediction && match.predictions.length === 0 && (
+        <div className="flex justify-center mt-4">
           <TransparentButton
             type="button"
-            onClick={() => {
-              setCurrentPrediction(prediction); // Establece la predicción actual
-              setIsModalOpen(true); // Abre el modal
-            }}
-            value="Editar"
+            onClick={() => setIsAddModalOpen(true)}
+            value="Añadir"
           />
         </div>
-      ))}
-      {currentPrediction && (
+      )}
+      {isModalOpen && currentPrediction && (
         <ModalEditPrediction
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           match={match}
-          prediction={currentPrediction} // Usa la predicción actual
-          onSave={handleSave} // Pasa la función para guardar cambios
+          prediction={currentPrediction}
+          onSave={handleSave}
         />
       )}
+      {isAddModalOpen && (
+        <ModalAddPrediction
+          isOpen={isAddModalOpen}
+          onClose={() => setIsAddModalOpen(false)}
+          match={match}
+          onSave={handleAddSave}
+          user={user}
+        />
+      )}
+      {toast.visible && (
+        <Toast type={toast.type} message={toast.message} onClose={closeToast} />
+      )}{" "}
     </div>
   );
 }

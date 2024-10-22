@@ -123,6 +123,7 @@ export function Predictions() {
             key={match.match.id}
             match={match}
             updateMatches={setMatches}
+            user={selectedUser}
           />
         ))}
       </section>
