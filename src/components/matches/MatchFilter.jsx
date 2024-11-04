@@ -15,7 +15,6 @@ export function MatchFilter({ data, setSelectedMatchday, selectedMatchday }) {
         selectedMatchday={selectedMatchday}
         onChange={handleMatchdayChange}
       />
-      <Button type="button" value="Buscar" onClick={() => {}} />
     </section>
   );
 }

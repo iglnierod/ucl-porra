@@ -3,10 +3,8 @@ import React from "react";
 import { MatchFilter } from "./MatchFilter";
 import { MatchCard } from "./MatchCard";
 import { Title } from "../Title";
-import {
-  fetchMatchdays,
-  fetchMatchesByMatchday,
-} from "../../services/matchService"; // Importa correctamente las funciones
+import { fetchMatchesByMatchday } from "../../services/matchService"; // Importa correctamente las funciones
+import { fetchMatchdays } from "../../services/matchdayService";
 
 export function Matches() {
   const [matchdays, setMatchdays] = useState([]);
@@ -19,7 +17,6 @@ export function Matches() {
     const loadMatchdays = async () => {
       try {
         const data = await fetchMatchdays();
-        console.log(data + "añslkdjfa");
         setMatchdays(data);
         setLoading(false);
       } catch (error) {

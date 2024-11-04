@@ -9,9 +9,9 @@ export function MatchDaySelect({ data, selectedMatchday, onChange }) {
       <option disabled value="-1">
         Selecciona una jornada
       </option>
-      {data.map((jornada, i) => (
-        <option key={i} value={jornada}>
-          Jornada {jornada}
+      {data.map((matchday, index) => (
+        <option key={index} value={matchday.id}>
+          {matchday.name}
         </option>
       ))}
     </select>

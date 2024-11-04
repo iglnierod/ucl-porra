@@ -5,8 +5,8 @@ export function PredictionFilter({
   matchdaysData,
   onUserChange,
   onMatchdayChange,
-  selectedUser, // Asegúrate de recibir el usuario seleccionado
-  selectedMatchday, // Asegúrate de recibir la jornada seleccionada
+  selectedUser,
+  selectedMatchday,
 }) {
   const handleUserChange = (event) => {
     onUserChange(event.target.value);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { fetchMatchdays } from "../../services/matchService";
+import { fetchMatchdays } from "../../services/matchdayService";
 import { fetchUsers } from "../../services/userService";
 import { fetchMatchesByMatchdayAndUser } from "../../services/matchService";
 import { PredictionFilter } from "./PredictionFilter";
@@ -12,6 +12,7 @@ export function Predictions() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedMatchday, setSelectedMatchday] = useState(null);
   const [matches, setMatches] = useState([]);
+  const [matchdayStatus, setMatchdaysStatus] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
