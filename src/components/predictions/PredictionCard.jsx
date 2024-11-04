@@ -88,9 +88,9 @@ export function PredictionCard({ match, updateMatches, user }) {
       {match.predictions.map((prediction, index) => (
         <div className="flex items-center justify-between" key={index}>
           <MatchPrediction prediction={prediction} />
-          {console.log("user:", user)}
+          {/* {console.log("user:", user)}
           {console.log("prediction.user.id: ", prediction.user.id)}
-          {console.log("pred.user.id == user.id", prediction.user.id == user)}
+          {console.log("pred.user.id == user.id", prediction.user.id == user)} */}
           {prediction.user.id == user &&
             match.match.matchday.status === MatchdayStatus.CURRENT && (
               <TransparentButton
