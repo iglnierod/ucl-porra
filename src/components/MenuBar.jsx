@@ -5,8 +5,11 @@ import { MenuItem } from "./MenuItem.jsx";
 export function MenuBar() {
   return (
     <nav className="flex w-10/12 justify-between">
+
       <section>
-        <h1 className="text-xl cursor-pointer p-2">Porra GGT</h1>
+        <Link to="/">
+          <MenuItem value="Porra GGT" />
+        </Link>
       </section>
       <section className="flex gap-4">
         <Link to="/">
